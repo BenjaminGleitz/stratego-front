@@ -1,0 +1,58 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #222;
+    color: white;
+}
+
+.game-section {
+    display: flex;
+    flex-direction: row;
+    height: 80vh;
+}
+
+/* Style pour les cases du plateau */
+.board {
+    display: grid;
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px);
+    gap: 1px;
+}
+
+.cell {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ccc;
+    text-align: center;
+    line-height: 50px;
+    user-select: none; /* Empêche la sélection de texte lors du glissement des pièces */
+}
+
+/* Style pour les trous au milieu du plateau */
+.hole {
+    background-color: #ccc;
+}
+
+/* Style pour la liste des pièces */
+.pieces-list {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0 0 20px;
+    height: 90%;
+    flex-wrap: wrap;
+}
+
+.piece {
+    cursor: pointer;
+    margin:0 5px 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    user-select: none; /* Empêche la sélection de texte lors du glissement des pièces */
+}
+
+.piece-on-board {
+    background-color: blue;
+    border-radius: 5px;
+}

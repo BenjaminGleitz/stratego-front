@@ -1,0 +1,36 @@
+
+body {
+    background-color: black; /* Couleur de fond noire */
+    color: white; /* Couleur du texte blanc */
+    margin: 0; /* Supprimer les marges par défaut du corps */
+    padding: 0; /* Supprimer les rembourrages par défaut du corps */
+    font-family: Arial, sans-serif; /* Choix de la police de caractères */
+}
+a{
+    color: white;
+}
+h1{
+    color: white;
+    text-align: center;
+    margin-bottom: 20px;
+}
+h2{
+    color: white;
+    text-align: center;
+    margin-bottom: 40px;
+}
+p{
+    color: white;
+}
+
+button{
+    border-color: white;
+    background-color: black;
+    color: white;
+    width: 320px;
+    height: 40px;
+    font-size: 18px; /* Taille de la police */
+    text-align: center;
+    margin-left: 300px;
+    margin-top: 50px;
+}

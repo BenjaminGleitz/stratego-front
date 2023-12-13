@@ -1,0 +1,45 @@
+<!--Alexandre parti mode de jeu-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stratego Game</title>
+    <link rel="stylesheet" href="mode.css">
+</head>
+
+<body>
+    <h1>Stratego Game</h1>
+    <h2>nom du joueur(euse)</h2>
+    <div class="row">
+        <div class="col">
+            <button id="Penny">Penny</button>
+            
+            <button id="newButton">New</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button id="Sheldon">Sheldon</button>            
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <button id="Robby">Robby</button>
+        </div>
+    </div>
+</body>
+<script>
+    // Fonction à exécuter lorsqu'on clique sur le bouton "New"
+    function handleNewButtonClick() {
+        // Redirection vers la page "choix_equipes"
+        window.location.href = 'choix_equipe.html';
+    }
+
+    // Obtenez la référence du bouton
+    var newButton = document.getElementById("newButton");
+
+    // Ajoutez un écouteur d'événements pour le clic sur le bouton
+    newButton.addEventListener("click", handleNewButtonClick);
+</script>
