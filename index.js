@@ -52,33 +52,70 @@ function createBoard() {
     }
 }
 
-// Fonction pour mélanger les pièces en faisant appel à l'API - Benjamin GLEITZ
+// Récupérez l'ID de la partie depuis l'URL (paramètre gameId)
+const urlParams = new URLSearchParams(window.location.search);
+const gameId = urlParams.get('gameId');
+
 async function shuffle() {
     try {
-        const response = await fetch('http://localhost:3000/'); // !Remplacez l'URL pour api-games
+        // Effectuez l'appel API pour mélanger
+        const response = await fetch(`http://localhost:3000/games/${gameId}`, {
+            method: 'PATCH', // Utilisez la méthode POST pour les opérations de mise à jour
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
         if (!response.ok) {
-            throw new Error('Unable to fetch game configuration');
+            console.error('Error:', response.statusText);
+            return;
         }
 
-        const newConfig = await response.json();
+        // Mettez à jour le redSetup en appelant la fonction update
+        await fetch(`http://localhost:3000/games/${gameId}`, {
+            method: 'PATCH', // Utilisez la méthode PATCH pour les opérations de mise à jour partielle
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                redSetup: 'ok',
+            }),
+        });
 
-        updateBoard(newConfig);
+        // Optionnel : Effectuez toute autre action nécessaire après la mise à jour
+        console.log('RedSetup updated: ok');
     } catch (error) {
         console.error('Error:', error);
     }
 }
 
+// // Fonction pour mélanger les pièces en faisant appel à l'API - Benjamin GLEITZ
+// async function shuffle() {
+//     try {
+//         const response = await fetch('http://localhost:3000/'); // !Remplacez l'URL pour api-games
+//         if (!response.ok) {
+//             throw new Error('Unable to fetch game configuration');
+//         }
+
+//         const newConfig = await response.json();
+
+//         updateBoard(newConfig);
+//     } catch (error) {
+//         console.error('Error:', error);
+//     }
+// }
+
 // Fonction pour mettre à jour le plateau avec une nouvelle configuration - Benjamin GLEITZ
-function updateBoard(newConfig) {
-    // Réinitialisez le plateau
-    initialBoard.forEach(row => row.fill(null));
+// function updateBoard(newConfig) {
+//     // Réinitialisez le plateau
+//     initialBoard.forEach(row => row.fill(null));
 
-    newConfig.forEach(({ row, col, piece }) => {
-        initialBoard[row][col] = piece;
-    });
+//     newConfig.forEach(({ row, col, piece }) => {
+//         initialBoard[row][col] = piece;
+//     });
 
-    renderBoard();
-}
+//     renderBoard();
+// }
 
 // Fonction pour afficher le plateau - Benjamin GLEITZ
 function renderBoard() {
@@ -106,5 +143,5 @@ function renderBoard() {
     }
 }
 
-// Appeler la fonction pour créer le plateau - Benjamin GLEITZ
-createBoard();
+// Mettez à jour le contenu de l'élément avec le message
+messageElement.textContent = message;

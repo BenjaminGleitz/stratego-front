@@ -12,34 +12,120 @@
 <body>
     <h1>Stratego Game</h1>
     <h2>nom du joueur(euse)</h2>
-    <div class="row">
-        <div class="col">
-            <button id="Penny">Penny</button>
-            
+    <div class="game-menu">
+        <div class="new row">
             <button id="newButton">New</button>
         </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <button id="Sheldon">Sheldon</button>            
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <button id="Robby">Robby</button>
+        <!-- Ajoutez une classe "game-link" à la div créée pour chaque partie -->
+        <div class="created row game-link" data-game-id="${game.id}">
+            <p>${game.status}: ${game.redPlayerName}</p>
         </div>
     </div>
 </body>
 <script>
+    // Benjamin-GLEITZ
+    // écouteur d'événements au bouton "New"
+    document.getElementById('newButton').addEventListener('click', handleNewButtonClick);
+
     // Fonction à exécuter lorsqu'on clique sur le bouton "New"
-    function handleNewButtonClick() {
-        // Redirection vers la page "choix_equipes"
-        window.location.href = 'choix_equipe.html';
+    async function handleNewButtonClick() {
+        try {
+            const redPlayerName = prompt('Votre prénom:');
+
+            const response = await fetch('http://localhost:3000/games', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    redPlayerName,
+                    status
+                }),
+            });
+
+            if (!response.ok) {
+                console.error('Error:', response.statusText);
+                return;
+            }
+
+            const responseData = await response.json();
+            console.log('Response:', responseData);
+
+            // Rediriger vers une autre page avec les données de la partie
+            window.location.href = `board.html?gameId=${responseData.id}`;
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
-    // Obtenez la référence du bouton
-    var newButton = document.getElementById("newButton");
+    // Fonction pour rejoindre une partie en tant que joueur bleu
+    async function joinGame(gameId) {
+        try {
+            const bluePlayerName = prompt('Prénom du joueur bleu:');
 
-    // Ajoutez un écouteur d'événements pour le clic sur le bouton
-    newButton.addEventListener("click", handleNewButtonClick);
+            const response = await fetch(`http://localhost:3000/games/${gameId}`, {
+                method: 'PATCH', // Utilisez PATCH ou une autre méthode appropriée pour les mises à jour partielles
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    bluePlayerName,
+                }),
+            });
+
+            if (!response.ok) {
+                console.error('Error:', response.statusText);
+                return;
+            }
+
+            // Rediriger vers une autre page avec les données de la partie
+            window.location.href = `board.html?gameId=${gameId}`;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    
+    // Fonction pour afficher les parties créées
+    async function displayCreatedGames() {
+        try {
+            const response = await fetch('http://localhost:3000/games?status=OPENED'); // Filtrer par statut OPENED
+            if (!response.ok) {
+                console.error('Error:', response.statusText);
+                return;
+            }
+
+            const openedGames = await response.json();
+
+            // Récupérer la div "created"
+            const createdDiv = document.querySelector('.created');
+
+            // Effacer le contenu existant de la div "created"
+            createdDiv.innerHTML = '';
+
+            // Boucler sur les parties ouvertes et les afficher
+            openedGames.forEach(game => {
+                const gameElement = document.createElement('div');
+                gameElement.classList.add('game-link');
+                gameElement.dataset.gameId = game.id; // Stockez l'ID de la partie dans l'attribut data-game-id
+                gameElement.innerHTML = `<p>${game.status}: ${game.redPlayerName}</p>`;
+                createdDiv.appendChild(gameElement);
+
+                // Ajoutez un écouteur d'événements pour rediriger vers la page de la partie au clic
+                gameElement.addEventListener('click', () => {
+                    if (!game.bluePlayerName) {
+                        // Si le joueur bleu n'est pas défini, demandez-lui de rejoindre la partie
+                        joinGame(game.id);
+                    } else {
+                        // Si le joueur bleu est déjà défini, redirigez simplement vers la page de la partie
+                        window.location.href = `board.html?gameId=${game.id}`;
+                    }
+                });
+            });
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    // Appel de la fonction pour afficher les parties créées au chargement de la page
+    displayCreatedGames();
 </script>
