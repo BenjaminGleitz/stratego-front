@@ -143,5 +143,40 @@ function renderBoard() {
     }
 }
 
+ // Fonction pour récupérer les paramètres de l'URL
+ function getQueryParameter(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+}
+
+// Fonction pour afficher les détails de la partie
+async function displayGameDetails() {
+    try {
+        const gameId = getQueryParameter('gameId');
+        if (!gameId) {
+            console.error('Game ID not provided in the URL.');
+            return;
+        }
+
+        const response = await fetch(`http://localhost:3000/games/${gameId}`);
+        if (!response.ok) {
+            console.error('Error:', response.statusText);
+            return;
+        }
+
+        const gameDetails = await response.json();
+        const gameInfosElement = document.getElementById('gameInfos');
+
+        // Afficher les noms des joueurs dans la div "gameInfos"
+        gameInfosElement.innerHTML = `<p>${gameDetails.redPlayerName}</p>`;
+        if (gameDetails.bluePlayerName) {
+            gameInfosElement.innerHTML += `<p>${gameDetails.bluePlayerName}</p>`;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+renderBoard();
 // Mettez à jour le contenu de l'élément avec le message
 messageElement.textContent = message;

@@ -9,14 +9,18 @@
 <body>
     <h1>Stratego</h1>
     <div class="game-section">
-        <div class="game-infos">informations :</div>
+        <div class="game-infos" id="gameInfos">informations :</div>
         <div id="board" class="board"></div>
         <h2 class="game-player"></h2>
     </div>
     <div class="button-section">
-        <button onclick="shuffle()">Shuffle</button>
-        <button onclick="prepareGame()">Ready</button>
+        <button id="shuffleButton" onclick="shuffle()">Shuffle</button>
+        <button id="prepareGameButton" onclick="prepareGame()">Ready</button>
     </div>
     <script src="index.js"></script>
+    <script>       
+        // Appeler la fonction pour afficher les détails de la partie lors du chargement de la page
+        displayGameDetails();
+    </script>
 </body>
 </html>

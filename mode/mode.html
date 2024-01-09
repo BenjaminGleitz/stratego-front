@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stratego Game</title>
+    <link rel="stylesheet" href="mode.css">
+</head>
+ 
+<body>
+    <h1>Stratego Game</h1>
+    <h2>nom du joueur(euse)</h2>
+    <div class="game-menu">
+        <div class="new row">
+            <button id="newButton">New</button>
+        </div>
+        <!-- Ajoutez une classe "game-link" à la div créée pour chaque partie -->
+        <div class="created row game-link" data-game-id="${game.id}">
+            <p>${game.status}: ${game.redPlayerName}</p>
+        </div>
+    </div>
+    <script src="mode.js"></script>
+</body>
+</html>
