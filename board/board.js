@@ -29,7 +29,12 @@ const holePositions = [
     { row: 5, col: 7 }
 ];
 
-// Fonction pour créer le plateau - Benjamin GLEITZ
+function handleCellClick(row, col) {
+    const cell = initialBoard[row][col];
+
+    console.log(`Cellule (${row}, ${col}) cliquée`);
+}
+
 function createBoard() {
     const boardContainer = document.getElementById('board');
 
@@ -51,6 +56,8 @@ function createBoard() {
     }
 }
 
+
+
 // Fonction pour afficher le plateau - Benjamin GLEITZ
 function renderBoard() {
     const boardContainer = document.getElementById('board');
@@ -67,6 +74,10 @@ function renderBoard() {
             if (isHole) {
                 cell.classList.add('hole');
             }
+
+            // Ajouter un gestionnaire d'événements de clic à chaque cellule
+            cell.addEventListener('click', () => handleCellClick(i, j));
+
             boardContainer.appendChild(cell);
         }
     }
@@ -162,6 +173,19 @@ function placeBluePieces() {
         }
     });
 }
+
+function isCurrentPlayersPiece(player) {
+    // Ajoutez ici la logique pour déterminer si c'est le tour du joueur actuel
+    // Vous pouvez utiliser une variable pour suivre le joueur actuel ou d'autres moyens
+    // Retournez true si c'est le tour du joueur, sinon false
+}
+
+function selectPiece(piece) {
+    // Ajoutez ici la logique pour gérer la sélection de la pièce
+    // Vous pouvez mettre en surbrillance la pièce sélectionnée ou effectuer d'autres actions nécessaires
+}
+
+
 function openPopup() {
     document.getElementById('popup').style.display = 'block';
     document.getElementById('overlay').style.display = 'block';
