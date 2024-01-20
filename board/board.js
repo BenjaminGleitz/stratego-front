@@ -76,7 +76,15 @@ function renderBoard() {
             }
 
             // Ajouter un gestionnaire d'événements de clic à chaque cellule
-            cell.addEventListener('click', () => handleCellClick(i, j));
+            cell.addEventListener('click', () => {
+                // Vérifier si la cellule contient une pièce avant d'appeler handleCellClick
+                if (initialBoard[i][j]) {
+                    handleCellClick(i, j);
+                } else {
+                    // Ajoutez ici le code à exécuter si la cellule est vide
+                    console.log('Cellule vide');
+                }
+            });
 
             boardContainer.appendChild(cell);
         }
