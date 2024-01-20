@@ -85,7 +85,7 @@ function placeRedPieces() {
             if (pieceType.type === 'Flag') {
                 // Place le drapeau au fond du plateau
                 row = 9;
-                col = 5;
+                col = Math.floor(Math.random() * 10);
             } else {
                 // Place les autres pièces en bas du plateau
                 do {
@@ -131,7 +131,7 @@ function placeBluePieces() {
             if (pieceType.type === 'Flag') {
                 // Place le drapeau au fond du plateau
                 row = 0;
-                col = 4;
+                col = Math.floor(Math.random() * 10);
             } else {
                 // Place les autres pièces en bas du plateau
                 do {

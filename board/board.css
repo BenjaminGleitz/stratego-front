@@ -73,14 +73,28 @@ body {
 
 .piece-on-board {
     border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.piece-on-board:hover {
+    border: 1px solid #fff;
+    cursor: pointer;
 }
 
 .blue-player {
     background-color: #007bff;
 }
 
+.blue-player:hover {
+    background-color: #0069d9;
+}
+
 .red-player {
     background-color: #dc3545;
+}
+
+.red-player:hover {
+    background-color: #c82333;
 }
 
 .popup {
