@@ -63,6 +63,13 @@ body {
 }
 
 .piece-on-board {
-    background-color: blue;
     border-radius: 5px;
+}
+
+.blue-player {
+    background-color: #007bff;
+}
+
+.red-player {
+    background-color: #dc3545;
 }

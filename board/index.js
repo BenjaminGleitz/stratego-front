@@ -1,18 +1,17 @@
-// Configuration des types de pièces - Benjamin GLEITZ
 const pieceTypes = [
-    { type: 'Flag', count: 1, name: 'Fl' },
-    { type: 'Scout', count: 8, name: 'Sc' },
-    { type: 'Infantry', count: 5, name: 'In' },
-    { type: 'Cavalry', count: 5, name: 'Cav' },
-    { type: 'Cannon', count: 6, name: 'Can' },
-    { type: 'Bomb', count: 6, name: 'Bo' },
-    { type: 'Sergeant', count: 4, name: 'Se' },
-    { type: 'Lieutenant', count: 4, name: 'Li' },
-    { type: 'Captain', count: 4, name: 'Ca' },
-    { type: 'Commander', count: 4, name: 'Com' },
-    { type: 'Colonel', count: 3, name: 'Col' },
-    { type: 'General', count: 2, name: 'Ge' },
-    { type: 'Marshal', count: 1, name: 'Ma' }
+    { type: 'Flag', count: 1, name: '🚩', "isRed": true},
+    { type: 'Scout', count: 8, name: '⛺', "isRed": true},
+    { type: 'Infantry', count: 5, name: '⚔️', "isRed": true},
+    { type: 'Cavalry', count: 4, name: '🏇', "isRed": true},
+    { type: 'Cannon', count: 4, name: '🚀', "isRed": true},
+    { type: 'Bomb', count: 6, name: '💣', "isRed": true},
+    { type: 'Sergeant', count: 1, name: 'SER', "isRed": true},
+    { type: 'Lieutenant', count: 3, name: 'LIEU', "isRed": true},
+    { type: 'Captain', count: 3, name: 'CAP', "isRed": true},
+    { type: 'Commander', count: 2, name: 'COM', "isRed": true},
+    { type: 'Colonel', count: 1, name: 'COL', "isRed": true},
+    { type: 'General', count: 1, name: 'GEN', "isRed": true},
+    { type: 'Marshal', count: 1, name: 'MAR', "isRed": true}
 ];
 
 // Plateau initial vide avec des trous - Benjamin GLEITZ
@@ -52,71 +51,6 @@ function createBoard() {
     }
 }
 
-// Récupérez l'ID de la partie depuis l'URL (paramètre gameId)
-const urlParams = new URLSearchParams(window.location.search);
-const gameId = urlParams.get('gameId');
-
-async function shuffle() {
-    try {
-        // Effectuez l'appel API pour mélanger
-        const response = await fetch(`http://localhost:3000/games/${gameId}`, {
-            method: 'PATCH', // Utilisez la méthode POST pour les opérations de mise à jour
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (!response.ok) {
-            console.error('Error:', response.statusText);
-            return;
-        }
-
-        // Mettez à jour le redSetup en appelant la fonction update
-        await fetch(`http://localhost:3000/games/${gameId}`, {
-            method: 'PATCH', // Utilisez la méthode PATCH pour les opérations de mise à jour partielle
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                redSetup: 'ok',
-            }),
-        });
-
-        // Optionnel : Effectuez toute autre action nécessaire après la mise à jour
-        console.log('RedSetup updated: ok');
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-// // Fonction pour mélanger les pièces en faisant appel à l'API - Benjamin GLEITZ
-// async function shuffle() {
-//     try {
-//         const response = await fetch('http://localhost:3000/'); // !Remplacez l'URL pour api-games
-//         if (!response.ok) {
-//             throw new Error('Unable to fetch game configuration');
-//         }
-
-//         const newConfig = await response.json();
-
-//         updateBoard(newConfig);
-//     } catch (error) {
-//         console.error('Error:', error);
-//     }
-// }
-
-// Fonction pour mettre à jour le plateau avec une nouvelle configuration - Benjamin GLEITZ
-// function updateBoard(newConfig) {
-//     // Réinitialisez le plateau
-//     initialBoard.forEach(row => row.fill(null));
-
-//     newConfig.forEach(({ row, col, piece }) => {
-//         initialBoard[row][col] = piece;
-//     });
-
-//     renderBoard();
-// }
-
 // Fonction pour afficher le plateau - Benjamin GLEITZ
 function renderBoard() {
     const boardContainer = document.getElementById('board');
@@ -133,50 +67,110 @@ function renderBoard() {
             if (isHole) {
                 cell.classList.add('hole');
             }
-
-            if (initialBoard[i][j]) {
-                cell.innerHTML = `<div class="piece-on-board">${initialBoard[i][j]}</div>`;
-            }
-
             boardContainer.appendChild(cell);
         }
     }
 }
 
- // Fonction pour récupérer les paramètres de l'URL
- function getQueryParameter(name) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
+// Fonction pour placer chaque pion sur le plateau - Benjamin GLEITZ
+function placeRedPieces() {
+    const boardContainer = document.getElementById('board');
+
+    // Pour chaque type de pièce
+    pieceTypes.forEach(pieceType => {
+        // Pour chaque pièce de ce type
+        for (let i = 0; i < pieceType.count; i++) {
+            let row, col;
+
+            if (pieceType.type === 'Flag') {
+                // Place le drapeau au fond du plateau
+                row = 9;
+                col = 5;
+            } else {
+                // Place les autres pièces en bas du plateau
+                do {
+                    row = Math.floor(Math.random() * 4) + 6; // Lignes 6 à 9 pour le joueur rouge (en bas du plateau)
+                    col = Math.floor(Math.random() * 10);
+                } while (initialBoard[row][col] !== null);
+            }
+
+            // Placer la pièce dans cette cellule
+            initialBoard[row][col] = {
+                type: pieceType.type,
+                player: 'red'
+            };
+
+            // Créer l'élément HTML pour la pièce
+            const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+            const pieceElement = document.createElement('div');
+            pieceElement.className = 'piece-on-board';
+            pieceElement.textContent = pieceType.name;
+
+            // Ajouter la classe spécifique pour les pièces rouges
+            if (pieceType.isRed) {
+                pieceElement.classList.add('red-player');
+            }
+
+            // Ajouter l'élément pièce à la cellule
+            cell.appendChild(pieceElement);
+        }
+    });
 }
 
-// Fonction pour afficher les détails de la partie
-async function displayGameDetails() {
-    try {
-        const gameId = getQueryParameter('gameId');
-        if (!gameId) {
-            console.error('Game ID not provided in the URL.');
-            return;
-        }
+// Fonction pour placer chaque pion sur le plateau - Benjamin GLEITZ
+function placeBluePieces() {
+    const boardContainer = document.getElementById('board');
 
-        const response = await fetch(`http://localhost:3000/games/${gameId}`);
-        if (!response.ok) {
-            console.error('Error:', response.statusText);
-            return;
-        }
+    // Pour chaque type de pièce
+    pieceTypes.forEach(pieceType => {
+        // Pour chaque pièce de ce type
+        for (let i = 0; i < pieceType.count; i++) {
+            let row, col;
+            pieceType.isRed = false;
 
-        const gameDetails = await response.json();
-        const gameInfosElement = document.getElementById('gameInfos');
+            if (pieceType.type === 'Flag') {
+                // Place le drapeau au fond du plateau
+                row = 0;
+                col = 4;
+            } else {
+                // Place les autres pièces en bas du plateau
+                do {
+                    row = Math.floor(Math.random() * 4); // Lignes 6 à 9 pour le joueur rouge (en bas du plateau)
+                    col = Math.floor(Math.random() * 10);
+                } while (initialBoard[row][col] !== null);
+            }
 
-        // Afficher les noms des joueurs dans la div "gameInfos"
-        gameInfosElement.innerHTML = `<p>${gameDetails.redPlayerName}</p>`;
-        if (gameDetails.bluePlayerName) {
-            gameInfosElement.innerHTML += `<p>${gameDetails.bluePlayerName}</p>`;
+            // Placer la pièce dans cette cellule
+            initialBoard[row][col] = {
+                type: pieceType.type,
+                player: 'blue'
+            };
+
+            // Créer l'élément HTML pour la pièce
+            const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+            const pieceElement = document.createElement('div');
+            pieceElement.className = 'piece-on-board';
+            pieceElement.textContent = pieceType.name;
+
+            // Ajouter la classe spécifique pour les pièces rouges
+            if (!pieceType.isRed) {
+                pieceElement.classList.add('blue-player');
+            }
+
+            // Ajouter l'élément pièce à la cellule
+            cell.appendChild(pieceElement);
         }
-    } catch (error) {
-        console.error('Error:', error);
-    }
+    });
 }
 
+// Appellez la fonction pour créer le plateau
+createBoard();
+
+// Appellez la fonction pour afficher le plateau
 renderBoard();
-// Mettez à jour le contenu de l'élément avec le message
-messageElement.textContent = message;
+
+// Appellez la fonction pour placer les pièces rouges sur le plateau
+placeRedPieces();
+
+// Appellez la fonction pour placer les pièces bleues sur le plateau
+placeBluePieces();

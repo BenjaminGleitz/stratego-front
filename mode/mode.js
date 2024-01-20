@@ -62,13 +62,14 @@ async function joinGame(gameId) {
 // Fonction pour afficher les parties créées
 async function displayCreatedGames() {
     try {
-        const response = await fetch('http://localhost:3000/games?status=OPENED');
+        const response = await fetch('http://localhost:3000/games/status/OPENED');
         if (!response.ok) {
             console.error('Error:', response.statusText);
             return;
         }
- 
+
         const openedGames = await response.json();
+        console.log(openedGames);
  
         // Récupérer la div "created"
         const createdDiv = document.querySelector('.created');
