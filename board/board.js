@@ -162,11 +162,32 @@ function placeBluePieces() {
         }
     });
 }
+function openPopup() {
+    document.getElementById('popup').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
 
+    showSection('section1')
+}
+
+function closePopup() {
+    document.getElementById('popup').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+}
+
+function showSection(sectionId) {
+            // Masquer toutes les sections
+            var sections = document.getElementsByClassName('section');
+            for (var i = 0; i < sections.length; i++) {
+                sections[i].style.display = 'none';
+            }
+            
+            // Afficher la section spécifiée
+            document.getElementById(sectionId).style.display = 'block';
+        }
+        
 // Appellez la fonction pour créer le plateau
 createBoard();
 
-// Appellez la fonction pour afficher le plateau
 renderBoard();
 
 // Appellez la fonction pour placer les pièces rouges sur le plateau

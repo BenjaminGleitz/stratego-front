@@ -1,15 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stratego Game</title>
     <link rel="stylesheet" href="board.css">
 </head>
+
 <body>
     <h1>Stratego</h1>
+    <div class="rules-pop-pup">
+        <button class="custom-button" onclick="openPopup()">RÈGLE</button>
+        <div class="popup" id="popup">
+            <div class="nav-tabs">
+                <a href="#" onclick="showSection('section1'); return false;" id="link-section">BUT DU JEU</a>
+                <a href="#" onclick="showSection('section2'); return false;">DISPOSITION DES PIÈCES</a>
+                <a href="#" onclick="showSection('section3'); return false;">TOUR DE JEU</a>
+            </div>
+            <div class="section" id="section1">
+                <h2>BUT DU JEU</h2>
+                <p>Le but du Stratego Original est de s'emparer du drapeau ennemi. 
+                Il est donc plus prudent de placer votre drapeau un peu à l'arrière, afin d'éviter qu'il ne soit pris immédiatement. 
+                Vous disposez de six bombes pour le protéger au mieux.</p>
+            </div>
+            
+            <!-- Section 2 -->
+            <div class="section" id="section2">
+                <h2>DISPOSITION DES PIÈCES</h2>
+                <p>On doit disposer stratégiquement les pièces de façon à ce que l'attaque et la défense se déploient en faveur de chaque joueur qui les déplace.
+
+                    Il y a deux camps: les rouges et les bleus. Étant donné que ce sont les rouges qui ouvrent le jeu, on tire d'abord au sort pour déterminer à quel joueur cette couleur sera attribuée.
+                    
+                    Les joueurs se placent face à face, le carton du jeu entre eux, l'emblème Stratego étant tourné vers eux.
+                    Chaque joueur place une pièce dans chaque case de la moitié du carton qui lui est attribuée, mais de telle façon que l'adversaire ne voit que les dos de ces pièces, afin que ce dernier ignore la valeur de chacune des pièces placées.
+                    
+                    Les deux rangs de cases du milieu restent inoccupés, de même que les deux lacs à travers lesquels les deux armées ne peuvent pas se mouvoir au cours du jeu.
+                    
+                    La disposition des pièces doit être étudiée d'après les règles du jeu d'une part, et suivant l'inspiration stratégique du joueur d'autre part.</p>
+            </div>
+
+            <div class="section" id="section3">
+                <h2>TOUR DE JEU</h2>
+                <p>A tour de rôle, les joueurs peuvent déplacer une de leurs pièces d'une case à la fois, soit en avant ou en arrière, soit latéralement à gauche ou à droite. Seul l'éclaireur a le droit en un coup, de sauter par dessus plus d'une case libre, cependant pas plus loin que la case devant ou à côté d'un adversaire, ce par quoi il trahit naturellement son rang.
+                    
+                    Le drapeau et les bombes ne doivent pas être déplacés et restent donc pendant tout le jeu sur les cases où ils ont été placés au début. Lorsque les bleus et les rouges se sont rapprochés (les pièces se trouvant soit face à face, soit à côté les unes des autres) le joueur peut prendre une de ses pièces et en touchant celle de son adversaire, il doit nommer le grade de sa pièce personnelle. Le joueur adverse répond en nommant le rang de sa pièce. Si c'est une pièce d'un rang inférieur, elle est alors enlevée du carton et la pièce de rang supérieur prend la place devenue libre. Si cependant la pièce de l'adversaire est d'un rang supérieur, alors la pièce de rang inférieur disparaît du carton et la pièce de rang supérieur reste à sa place.
+                    
+                    En cas de rangs identiques, les deux pièces tombent.
+                    
+                    L'espion tombe devant les éclaireurs, ceux-ci tombent devant les démineurs, les démineurs tombent devant les sergents, les sergents devant les lieutenants, etc. Si toutes les pièces se trouvent rapprochées, il n'est pas nécessaire d'attaquer immédiatement; l'initiative de l'attaque peut venir de chacun des deux joueurs. Chaque pièce, quoi que soit son rang, sauf un démineur, tombe contre une bombe qui, rappelons-le, ne doit pas être déplacée. Si l'un des joueurs vient à frapper une bombe de l'adversaire, celui-ci répond boum. Seul un démineur est en mesure de détruire une bombe, après quoi elle doit être retirée du jeu.
+                    
+                    Le drapeau, qui ne doit pas être déplacé, tombe devant n'importe quelle pièce de l'adversaire. Le maréchal, le plus haut en grade, tombe seulement devant l'espion, s'il est pris par le dernier. Quand, au contraire, le maréchal touche à l'espion, ce dernier tombe.
+                    
+                    Si un joueur ne peut plus déplacer aucune de ses pièces, par exemple lorsqu'il n'a plus que des bombes et le drapeau, il doit capituler. Une pièce ne peut être déplacée plus de cinq fois de suite entre les mêmes 2 cases. C'est le joueur qui réussit à s'emparer du drapeau de son adversaire, qui est le gagnant.</p>
+            </div>
+            <button onclick="closePopup()">Fermer</button>
+        </div>
+        <div class="overlay" id="overlay" onclick="closePopup()"></div>
+    </div>
     <div class="game-section">
-        <div class="game-infos" id="gameInfos">informations :</div>
+        <div class="game-infos" id="gameInfos">
+            <i class="fa-regular fa-user"></i>
+        </div>
+
         <div id="board" class="board"></div>
         <h2 class="game-player"></h2>
     </div>
@@ -17,10 +70,11 @@
         <button id="shuffleButton" onclick="shuffle()">Shuffle</button>
         <button id="prepareGameButton" onclick="prepareGame()">Ready</button>
     </div>
-    <script src="index.js"></script>
-    <script>       
+    <script src="board.js"></script>
+    <script>
         // Appeler la fonction pour afficher les détails de la partie lors du chargement de la page
         displayGameDetails();
     </script>
 </body>
+
 </html>
