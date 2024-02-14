@@ -14,6 +14,9 @@ const pieceTypes = [
     { type: 'Marshal', count: 1, name: 'MAR', "isRed": true}
 ];
 
+let currentPlayer = 'red';  // Initialisez la variable avec le joueur de départ
+let selectedPiece = null;
+
 // Plateau initial vide avec des trous - Benjamin GLEITZ
 const initialBoard = Array.from({ length: 10 }, () => Array(10).fill(null));
 
@@ -33,6 +36,31 @@ function handleCellClick(row, col) {
     const cell = initialBoard[row][col];
 
     console.log(`Cellule (${row}, ${col}) cliquée`);
+    console.log('Contenu de la cellule :', cell);
+
+    // Vérifier si la cellule contient une pièce avant de gérer le clic
+    if (cell) {
+        // Vérifier si la pièce appartient au joueur actuel
+        if (isCurrentPlayersPiece(cell.player)) {
+            // La pièce appartient au joueur actuel, vous pouvez gérer le clic ici
+            console.log("C'est votre pièce !");
+            console.log('Pièce sélectionnée :', cell);
+            selectPiece(cell, row, col);
+            switchTurn();
+        } else {
+            // La pièce n'appartient pas au joueur actuel, ignorez le clic
+            console.log("Ce n'est pas votre pièce !");
+        }
+    } else {
+        // Si une pièce est déjà sélectionnée, essayez de déplacer la pièce
+        if (selectedPiece) {
+            movePiece(selectedPiece.row, selectedPiece.col, row, col);
+            selectedPiece = null; // Réinitialiser la pièce sélectionnée après le déplacement
+        } else {
+            // Ajoutez ici le code à exécuter si la cellule est vide
+            console.log('Cellule vide');
+        }
+    }
 }
 
 function createBoard() {
@@ -55,8 +83,6 @@ function createBoard() {
         }
     }
 }
-
-
 
 // Fonction pour afficher le plateau - Benjamin GLEITZ
 function renderBoard() {
@@ -88,6 +114,46 @@ function renderBoard() {
 
             boardContainer.appendChild(cell);
         }
+    }
+}
+
+function selectPiece(cell, row, col) {
+    // Réinitialiser la classe de sélection pour toutes les cellules
+    resetSelection();
+
+    // Stocker la pièce sélectionnée
+    console.log(cell, row, col);
+    const selectedPiece = { row: row, col: col };
+
+    // Ajouter une classe de sélection à la cellule de la pièce sélectionnée
+    const cellToMove = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+    console.log(row,  col);
+
+    cellToMove.classList.add('selected');
+
+}
+
+function resetSelection() {
+    // Réinitialiser la classe de sélection pour toutes les cellules
+    const selectedCells = document.querySelectorAll('.selected');
+    selectedCells.forEach(cell => cell.classList.remove('selected'));
+}
+
+function movePiece(currentRow, currentCol, newRow, newCol) {
+    const currentCell = initialBoard[currentRow][currentCol];
+    const newCell = initialBoard[newRow][newCol];
+
+    // Vérifier si la nouvelle cellule est vide
+    if (!newCell) {
+        // Déplacer la pièce vers la nouvelle position
+        initialBoard[newRow][newCol] = currentCell;
+        initialBoard[currentRow][currentCol] = null;
+
+        // Mettre à jour l'interface utilisateur (UI)
+        renderBoard();
+    } else {
+        // La nouvelle cellule n'est pas vide, vous pouvez ajouter un code ici pour gérer les règles spécifiques
+        console.log('Déplacement invalide : la nouvelle cellule est occupée.');
     }
 }
 
@@ -182,17 +248,17 @@ function placeBluePieces() {
     });
 }
 
+// Fonction pour vérifier si la pièce appartient au joueur actuel - Benjamin GLEITZ
 function isCurrentPlayersPiece(player) {
-    // Ajoutez ici la logique pour déterminer si c'est le tour du joueur actuel
-    // Vous pouvez utiliser une variable pour suivre le joueur actuel ou d'autres moyens
-    // Retournez true si c'est le tour du joueur, sinon false
+    // Vérifiez si le joueur de la pièce est le joueur actuel
+    console.log(currentPlayer);
+    return player === currentPlayer;
 }
 
-function selectPiece(piece) {
-    // Ajoutez ici la logique pour gérer la sélection de la pièce
-    // Vous pouvez mettre en surbrillance la pièce sélectionnée ou effectuer d'autres actions nécessaires
+// Fonction pour changer de joueur - Benjamin GLEITZ
+function switchTurn() {
+    currentPlayer = (currentPlayer === 'red') ? 'blue' : 'red';
 }
-
 
 function openPopup() {
     document.getElementById('popup').style.display = 'block';
@@ -220,6 +286,7 @@ function showSection(sectionId) {
 // Appellez la fonction pour créer le plateau
 createBoard();
 
+// Appellez la fonction pour afficher le plateau
 renderBoard();
 
 // Appellez la fonction pour placer les pièces rouges sur le plateau
