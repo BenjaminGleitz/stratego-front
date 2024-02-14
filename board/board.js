@@ -44,27 +44,9 @@ function clearBoard() {
 
 // Fonction pour mélanger les pièces et les placer sur le plateau de jeu en fonction des coordonnées
 function shuffle(pieceConfigurations) {
-    // Effacer le plateau de jeu avant de placer les pièces
-    clearBoard();
-
-    console.log('Configurations de pièces :', pieceConfigurations);
-
-    // Placer chaque pièce sur le plateau en fonction de ses coordonnées
-    pieceConfigurations.forEach(piece => {
-        const row = piece.coordinates.row;
-        const col = piece.coordinates.col;
-        const pieceType = piece.type;
-        const player = piece.isRed ? 'red' : 'blue'; // Déterminer le joueur de la pièce
-
-        // Placer la pièce sur le plateau à la position (row, col)
-        initialBoard[row][col] = {
-            type: pieceType,
-            player: player
-        };
-    });
-
-    // Actualiser l'interface utilisateur pour refléter les changements sur le plateau
-    renderBoard();
+    
+    
+fetchPieceConfigurations();
 }
 
 // Fonction pour afficher le plateau
@@ -148,6 +130,18 @@ function fetchPieceConfigurations() {
         .catch(error => {
             console.error('Erreur lors de la récupération des configurations de pièces :', error);
         });
+}
+
+function openPopup() {
+    document.getElementById('popup').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+ 
+    showSection('section1')
+}
+ 
+function closePopup() {
+    document.getElementById('popup').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
 }
 
 // Appel de la fonction pour récupérer les configurations de pièces et les placer sur le plateau
