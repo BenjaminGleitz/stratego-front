@@ -4,6 +4,7 @@ body {
     justify-content: center;
     align-items: center;
     background-color: #222;
+    background: linear-gradient(to bottom, black,black,blue,black,black,red ,black,black );
     color: white;
 }
 .custom-button {
